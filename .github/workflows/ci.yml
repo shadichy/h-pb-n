@@ -35,6 +35,7 @@ jobs:
             *_*_*.buildinfo
             *_*_*.changes
             *_*_*.deb
+            *_*_*.udeb
 
   release:
     name: Release
