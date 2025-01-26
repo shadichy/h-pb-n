@@ -27,4 +27,28 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: built-deb-files.zip
+          path: built-deb-files-*.zip
+
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build files
+        id: download-build-files
+        uses: actions/download-artifact@v4
+        with:
+          path: out
+          pattern: "*"
+          merge-multiple: true
+      - name: List Files
+        run: ls -R ${{ steps.download-build-files.outputs.download-path }}
+    
+      - uses: "softprops/action-gh-release@v2.1.0"
+        with:
+          token: "${{ secrets.RELEASE_TOKEN }}"
+          prerelease: false
+          tag_name: "r${{ github.run_number }}"
+          name: "Release r${{ github.run_number }}"
+          files: |
+            ${{ steps.download-build-files.outputs.download-path }}/*
