@@ -23,11 +23,18 @@ jobs:
 
       - name: Build DEB package
         uses: DevChall-by-SDCY-and-VXM/debian-buildpackage-template@v0.0.10
+
+      - name: Extract artifact
+        run: unzip built-deb-files-*.zip
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: built-deb-files-*.zip
+          path: |
+            metadata.yml
+            *_*_*.buildinfo
+            *_*_*.changes
+            *_*_*.deb
 
   release:
     name: Release
